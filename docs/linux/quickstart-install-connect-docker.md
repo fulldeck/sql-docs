@@ -365,6 +365,39 @@ The **SA** account is a system administrator on the SQL Server instance that get
       -Q "ALTER LOGIN SA WITH PASSWORD='<YourNewStrong@Passw0rd>'"
    ```
    ::: zone-end
+   
+## Copy databases to volume on the server
+
+For MSSQL 2019 the permisisons for the containter has changed from 'root' to 'mssql' so not the local mapped drives need to have the same permissions
+
+1.
+Start the MSSQL2019 container.
+
+2.
+From the command line copy the folders from the sql1 containter to the mapped drive location:
+docker cp sql1:/var/opt/mssql/data /mnt/user/appdata/mssql/
+docker cp sql1:/var/opt/mssql/secrets /mnt/user/appdata/mssql/
+docker cp sql1:/var/opt/mssql/log /mnt/user/appdata/mssql/
+
+3.
+Shut down the MSSQL2019 container:
+
+4.
+Add these mappings to the MSSQL2019 container template:
+/mnt/user/appdata/mssql/data
+/mnt/user/appdata/mssql/secrets 
+/mnt/user/appdata/mssql/log
+
+5.
+Change the permssions on the folders and files:
+sudo chown -R 10001 /mnt/user/appdata/mssql/
+
+6.
+Start up the MSSQL2019 container
+
+7.
+Connect to sql1 and check that the system and your databases are there
+
 
 ## Connect to SQL Server
 
